@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rep Tracker">
+<meta name="theme-color" content="#1d3a63">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<title>Diamond Rep Tracker</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* Layout: a single dugout-card column — counters, timer, schedule, week — stacked for one-thumb use */
+:root{
+  --bg:#eef1f4; --card:#ffffff; --fg:#17212e; --muted:#5d6b7c; --line:#d6dde5;
+  --navy:#1d3a63; --stitch:#c8322b; --grass:#2f7a4b; --clay:#b8673a; --chip:#e3e9f0;
+  --display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f151d; --card:#18212c; --fg:#e8edf3; --muted:#93a1b2; --line:#2a3644;
+  --navy:#8fb2e6; --stitch:#ef6a60; --grass:#5fbf83; --clay:#e0915f; --chip:#223040; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f151d; --card:#18212c; --fg:#e8edf3; --muted:#93a1b2; --line:#2a3644;
+  --navy:#8fb2e6; --stitch:#ef6a60; --grass:#5fbf83; --clay:#e0915f; --chip:#223040; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.45;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:.01em}
+h1{font-size:2.1rem;font-weight:800;line-height:1}
+h2{font-size:1.25rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.sub{color:var(--muted);margin:4px 0 0}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.spread{justify-content:space-between}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer;border:1px solid var(--line);background:var(--chip);border-radius:10px;padding:10px 14px;font-weight:600;min-height:44px}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
+button.primary{background:var(--navy);color:var(--card);border-color:var(--navy)}
+button.ghost{background:transparent}
+select,input{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 10px;min-height:44px}
+.num{font-variant-numeric:tabular-nums}
+.label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+
+/* counters */
+.drill{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.drill:first-of-type{border-top:0;padding-top:0}
+.drill .name{font-family:var(--display);font-size:1.35rem;font-weight:700;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--c)}
+.count{font-family:var(--display);font-size:2.6rem;font-weight:800;line-height:1;text-align:right}
+.count small{font-size:1rem;color:var(--muted);font-weight:600}
+.bar{grid-column:1/-1;height:8px;background:var(--chip);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--c);width:0;transition:width .25s,background .25s}
+.drill.met .count{color:var(--grass)} .drill.met .bar i{background:var(--grass)}
+.drill.miss .count{color:var(--stitch)} .drill.miss .bar i{background:var(--stitch)}
+.status{grid-column:1/-1;font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-top:-4px}
+.drill.met .status{color:var(--grass)} .drill.miss .status{color:var(--stitch)}
+.btns{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr) auto;gap:6px}
+.btns button{padding:10px 0}
+.btns .undo{padding:10px 12px}
+.goal{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:.85rem}
+.goal input{width:70px;min-height:34px;padding:4px 8px}
+
+/* timer */
+.clock{font-family:var(--display);font-size:5rem;font-weight:800;line-height:1;text-align:center;letter-spacing:.02em}
+.clock.done{color:var(--stitch)}
+.ring{height:6px;background:var(--chip);border-radius:99px;overflow:hidden}
+.ring i{display:block;height:100%;width:0;background:var(--navy)}
+.phase{text-align:center;font-weight:600;color:var(--muted)}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.presets button{flex:1 1 30%}
+.presets button[aria-pressed="true"]{background:var(--navy);color:var(--card);border-color:var(--navy)}
+.ctrls{display:grid;grid-template-columns:2fr 1fr;gap:8px}
+
+/* schedule */
+.sched{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.sched li{display:flex;flex-direction:column;gap:8px;padding:10px;background:var(--chip);border-radius:10px}
+.sched .top{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}
+.sched .what{font-family:var(--display);font-weight:700;font-size:1.1rem;display:flex;align-items:center;gap:8px;min-width:0}
+.sched .top input{min-height:38px;padding:4px 8px}
+.days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.days button{min-height:40px;padding:0;font-size:.82rem;background:var(--card)}
+.days button[aria-pressed="true"]{background:var(--navy);color:var(--card);border-color:var(--navy)}
+.empty{color:var(--muted)}
+.sched .del{min-height:36px;padding:4px 10px;background:transparent;border-color:transparent;color:var(--muted)}
+.next{border-left:4px solid var(--stitch);padding:10px 12px;background:var(--chip);border-radius:0 10px 10px 0}
+.next b{font-family:var(--display);font-size:1.15rem}
+.add{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.add .full{grid-column:1/-1}
+.alert{background:var(--stitch);color:#fff;border-radius:12px;padding:14px;font-weight:600;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.alert button{background:#fff;color:#17212e;border:0}
+
+/* week chart */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;align-items:end;height:130px}
+.day{display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end}
+.stack{width:100%;max-width:34px;display:flex;flex-direction:column-reverse;border-radius:6px;overflow:hidden;background:var(--chip);flex:1;justify-content:flex-start}
+.stack span{display:block}
+.day .d{font-size:.72rem;color:var(--muted);font-weight:600}
+.day .t{font-size:.72rem;font-weight:600}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.tag{font-size:.72rem;background:var(--chip);border-radius:99px;padding:2px 8px;color:var(--muted);font-weight:600}
+.drill{border-radius:10px;margin-inline:-8px;padding-inline:8px}
+@keyframes flashG{0%,40%,80%{background:color-mix(in srgb,var(--grass) 35%,transparent)}20%,60%,100%{background:transparent}}
+@keyframes flashR{0%,40%,80%{background:color-mix(in srgb,var(--stitch) 35%,transparent)}20%,60%,100%{background:transparent}}
+.drill.flash-g{animation:flashG 1.6s ease-in-out}
+.drill.flash-r{animation:flashR 1.6s ease-in-out}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.drill.flash-g,.drill.flash-r{animation-duration:3s;animation-iteration-count:1}}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Diamond Rep Tracker</h1>
+    <p class="sub" id="today"></p>
+  </header>
+
+  <div class="alert" id="alert" hidden><span id="alertText"></span><button id="alertGo">Start timer</button></div>
+
+  <section class="card" aria-labelledby="h-reps">
+    <div class="row spread"><h2 id="h-reps">Today's reps</h2><span class="label num" id="total"></span></div>
+    <div id="drills"></div>
+  </section>
+
+  <section class="card" aria-labelledby="h-timer">
+    <h2 id="h-timer">Drill timer</h2>
+    <div class="presets" id="presets"></div>
+    <div class="row">
+      <label class="label" for="workMin">Work (min)</label><input id="workMin" class="num" type="number" min="1" max="120" value="20" style="width:76px">
+      <label class="label" for="restSec">Rest every 5 min (sec)</label><input id="restSec" class="num" type="number" min="0" max="300" value="0" style="width:76px">
+    </div>
+    <div class="clock num" id="clock">20:00</div>
+    <div class="ring"><i id="ringFill"></i></div>
+    <div class="phase" id="phase">Ready: Hitting</div>
+    <div class="ctrls">
+      <button class="primary" id="startBtn">Start</button>
+      <button id="resetBtn">Reset</button>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="h-sched">
+    <h2 id="h-sched">Practice schedule</h2>
+    <div class="next" id="next"></div>
+    <ul class="sched" id="sched"></ul>
+    <div class="add">
+      <span class="label full">New practice: tap the days</span>
+      <div class="days full" id="addDays" role="group" aria-label="Days"></div>
+      <select id="addDrill" aria-label="Drill"></select>
+      <input id="addTime" type="time" value="16:00" aria-label="Time">
+      <label class="label full" for="addMin" style="display:flex;align-items:center;gap:8px">Minutes <input id="addMin" class="num" type="number" min="5" max="120" value="20" style="width:80px"></label>
+      <button class="full" id="addBtn">Add to schedule</button>
+    </div>
+    <p class="sub" style="font-size:.85rem">Tap any day on a practice to turn it on or off. When this app is open at practice time, it beeps and shows a banner.</p>
+  </section>
+
+  <section class="card" aria-labelledby="h-week">
+    <div class="row spread"><h2 id="h-week">Last 7 days</h2><span class="tag" id="sampleTag" hidden>Example week</span></div>
+    <div class="week" id="week"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+</div>
+
+<script>
+const DRILLS=[
+  {id:"hit",name:"Hitting",unit:"swings",color:"var(--navy)",goal:100,min:20},
+  {id:"pitch",name:"Pitching",unit:"pitches",color:"var(--stitch)",goal:50,min:15},
+  {id:"gb",name:"Ground balls",unit:"grounders",color:"var(--grass)",goal:75,min:15}
+];
+const DAYS=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const DAYFULL=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+const KEY="diamond-reps-v1";
+const keyOf=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s)return s}catch(e){}
+  return {log:{},goals:{hit:100,pitch:50,gb:75},sched:[
+    {days:[1,3,6],time:"16:00",drill:"hit",min:20},{days:[2,4],time:"16:00",drill:"pitch",min:15},
+    {days:[1,5],time:"16:30",drill:"gb",min:15}],fired:{}}}
+let S=load();
+/* convert older one-day entries into multi-day entries */
+if(S.sched.some(s=>"day" in s)){const m={};S.sched.forEach(s=>{if("day" in s){const k=s.drill+"|"+s.time+"|"+s.min;
+  (m[k]=m[k]||{drill:s.drill,time:s.time,min:s.min,days:[]}).days.push(s.day)}else m[Math.random()]=s});S.sched=Object.values(m)}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+
+const today=()=>keyOf(new Date());
+function dayLog(k){return S.log[k]||(S.log[k]={hit:0,pitch:0,gb:0})}
+let undoStack=[];
+
+/* ---------- counters ---------- */
+const drillsEl=document.getElementById("drills");
+drillsEl.innerHTML=DRILLS.map(d=>`
+  <div class="drill" style="--c:${d.color}">
+    <div><div class="name"><span class="dot"></span>${d.name}</div>
+      <label class="goal">Goal <input class="num" type="number" min="1" id="goal-${d.id}"> ${d.unit}</label></div>
+    <div class="count num" id="c-${d.id}">0</div>
+    <div class="bar"><i id="b-${d.id}"></i></div>
+    <div class="status" id="s-${d.id}"></div>
+    <div class="btns">${[1,5,10,25].map(n=>`<button data-d="${d.id}" data-n="${n}" aria-label="Add ${n} ${d.unit}">+${n}</button>`).join("")}
+      <button class="undo ghost" data-undo="${d.id}" aria-label="Undo last ${d.name} entry">Undo</button></div>
+  </div>`).join("");
+drillsEl.addEventListener("click",e=>{
+  const b=e.target.closest("button");if(!b)return;
+  const L=dayLog(today());const id=b.dataset.d||b.dataset.undo,was=L[id]>=S.goals[id];
+  if(b.dataset.n){const n=+b.dataset.n;L[b.dataset.d]+=n;undoStack.push([b.dataset.d,n])}
+  else if(b.dataset.undo){const i=undoStack.map(u=>u[0]).lastIndexOf(b.dataset.undo);
+    if(i>-1){L[b.dataset.undo]=Math.max(0,L[b.dataset.undo]-undoStack[i][1]);undoStack.splice(i,1)}}
+  save();render();
+  if(!was&&L[id]>=S.goals[id]){flash(id,true);beep(2)}});
+function flash(id,good){const row=document.getElementById("c-"+id).closest(".drill");
+  row.classList.remove("flash-g","flash-r");void row.offsetWidth;row.classList.add(good?"flash-g":"flash-r");
+  row.addEventListener("animationend",()=>row.classList.remove("flash-g","flash-r"),{once:true})}
+DRILLS.forEach(d=>{const g=document.getElementById("goal-"+d.id);g.value=S.goals[d.id];
+  g.addEventListener("change",()=>{S.goals[d.id]=Math.max(1,+g.value||d.goal);save();render()})});
+
+function hasRealData(){return Object.values(S.log).some(l=>l.hit+l.pitch+l.gb>0)}
+function sampleLog(i){const s=[[80,30,40],[0,0,0],[110,45,60],[60,0,75],[120,50,0],[0,40,50],[90,0,30]][i];return {hit:s[0],pitch:s[1],gb:s[2]}}
+
+function render(){
+  const L=dayLog(today());let tot=0;
+  DRILLS.forEach(d=>{const v=L[d.id],g=S.goals[d.id];tot+=v;
+    document.getElementById("c-"+d.id).innerHTML=`${v}<small> / ${g}</small>`;
+    document.getElementById("b-"+d.id).style.width=Math.min(100,v/g*100)+"%";
+    const row=document.getElementById("c-"+d.id).closest(".drill"),met=v>=g;
+    row.classList.toggle("met",met);row.classList.toggle("miss",!met);
+    document.getElementById("s-"+d.id).textContent=met?"Goal hit ✓":(g-v)+" "+d.unit+" to go"});
+  document.getElementById("total").textContent=tot+" total reps";
+  // week
+  const real=hasRealData();document.getElementById("sampleTag").hidden=real;
+  const days=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);
+    days.push({d,l:real?(S.log[keyOf(d)]||{hit:0,pitch:0,gb:0}):sampleLog(6-i)})}
+  const max=Math.max(50,...days.map(x=>x.l.hit+x.l.pitch+x.l.gb));
+  document.getElementById("week").innerHTML=days.map((x,i)=>{const t=x.l.hit+x.l.pitch+x.l.gb;
+    return `<div class="day"><span class="t num">${t||""}</span><div class="stack" title="${t} reps">
+      ${DRILLS.map(d=>`<span style="height:${x.l[d.id]/max*100}%;background:${d.color}"></span>`).join("")}</div>
+      <span class="d">${i===6?"Today":DAYS[x.d.getDay()]}</span></div>`}).join("");
+  renderSched()}
+document.getElementById("legend").innerHTML=DRILLS.map(d=>`<span><i class="dot" style="--c:${d.color}"></i>${d.name}</span>`).join("");
+document.getElementById("today").textContent=new Date().toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+
+/* ---------- timer ---------- */
+let cur=DRILLS[0],total=20*60,left=total,running=false,tick=null,wake=null,restLeft=0,sinceRest=0;
+const clock=document.getElementById("clock"),phase=document.getElementById("phase"),startBtn=document.getElementById("startBtn");
+const presets=document.getElementById("presets");
+presets.innerHTML=DRILLS.map(d=>`<button data-p="${d.id}" aria-pressed="${d===cur}">${d.name}</button>`).join("");
+presets.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;selectDrill(b.dataset.p)});
+function selectDrill(id,mins){cur=DRILLS.find(d=>d.id===id);
+  presets.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.p===id));
+  document.getElementById("workMin").value=mins||cur.min;resetTimer()}
+document.getElementById("workMin").addEventListener("change",resetTimer);
+const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+function draw(){clock.textContent=fmt(restLeft>0?restLeft:left);
+  document.getElementById("ringFill").style.width=((total-left)/total*100)+"%"}
+function resetTimer(){stop();total=Math.max(1,+document.getElementById("workMin").value||cur.min)*60;left=total;restLeft=0;sinceRest=0;
+  clock.classList.remove("done");phase.textContent="Ready: "+cur.name;startBtn.textContent="Start";draw()}
+let actx=null;
+function beep(times=3){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+  for(let i=0;i<times;i++){const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=i%2?660:880;
+    o.connect(g);g.connect(actx.destination);const t=actx.currentTime+i*.35;
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.3,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.28);o.start(t);o.stop(t+.3)}}catch(e){}}
+function stop(){running=false;clearInterval(tick);try{wake&&wake.release()}catch(e){}wake=null}
+startBtn.addEventListener("click",async()=>{
+  if(running){stop();startBtn.textContent="Resume";phase.textContent="Paused: "+cur.name;return}
+  if(left<=0)resetTimer();
+  try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();actx.resume()}catch(e){}
+  try{wake=await navigator.wakeLock.request("screen")}catch(e){}
+  running=true;startBtn.textContent="Pause";phase.textContent="Go: "+cur.name;
+  tick=setInterval(()=>{
+    const rest=+document.getElementById("restSec").value||0;
+    if(restLeft>0){restLeft--;if(restLeft===0){beep(1);phase.textContent="Go: "+cur.name}draw();return}
+    left--;sinceRest++;
+    if(left<=0){stop();left=0;draw();clock.classList.add("done");startBtn.textContent="Start again";beep(5);
+      const v=dayLog(today())[cur.id],g=S.goals[cur.id],ok=v>=g;
+      phase.textContent=ok?cur.name+" done. Goal hit!":cur.name+" done. "+(g-v)+" "+cur.unit+" short of your goal.";
+      flash(cur.id,ok);document.getElementById("h-reps").scrollIntoView({behavior:"smooth"});return}
+    if(rest>0&&sinceRest>=300){sinceRest=0;restLeft=rest;beep(2);phase.textContent="Rest. Grab water."}
+    if(left===60&&restLeft===0){beep(1);phase.textContent="1 minute left"}
+    draw()},1000)});
+document.getElementById("resetBtn").addEventListener("click",resetTimer);
+
+/* ---------- schedule ---------- */
+const addDrill=document.getElementById("addDrill");
+addDrill.innerHTML=DRILLS.map(d=>`<option value="${d.id}">${d.name}</option>`).join("");
+const t12=t=>{let[h,m]=t.split(":").map(Number);return (h%12||12)+":"+String(m).padStart(2,"0")+(h<12?" AM":" PM")};
+const WEEK=[1,2,3,4,5,6,0];
+const chips=(on,attr)=>WEEK.map(day=>`<button type="button" ${attr} data-day="${day}" aria-pressed="${on.includes(day)}" aria-label="${DAYFULL[day]}">${DAYS[day]}</button>`).join("");
+function nextOcc(s,day,from=new Date()){const[h,m]=s.time.split(":").map(Number);const d=new Date(from);d.setHours(h,m,0,0);
+  let add=(day-d.getDay()+7)%7;if(add===0&&d<=from)add=7;d.setDate(d.getDate()+add);return d}
+function renderSched(){
+  const el=document.getElementById("sched");
+  if(!el.contains(document.activeElement)||document.activeElement.tagName!=="INPUT")
+  el.innerHTML=S.sched.length?S.sched.map((s,i)=>{const d=DRILLS.find(x=>x.id===s.drill);
+    return `<li><div class="top"><span class="what"><span class="dot" style="--c:${d.color}"></span>${d.name} · ${s.min} min</span>
+      <input type="time" id="st-${i}" data-time="${i}" value="${s.time}" aria-label="${d.name} time">
+      <button class="del" data-del="${i}" aria-label="Remove ${d.name} practice">✕</button></div>
+      <div class="days" role="group" aria-label="${d.name} days">${chips(s.days,`data-i="${i}"`)}</div></li>`}).join("")
+    :`<li class="empty">No practices scheduled yet. Add one below.</li>`;
+  const nx=S.sched.flatMap(s=>s.days.map(day=>({s,day,at:nextOcc(s,day)}))).sort((a,b)=>a.at-b.at)[0];
+  const nel=document.getElementById("next");
+  if(!nx){nel.innerHTML="Nothing scheduled. Pick some days below.";return}
+  const d=DRILLS.find(x=>x.id===nx.s.drill),hrs=(nx.at-new Date())/36e5;
+  const rel=hrs<1?Math.max(1,Math.round(hrs*60))+" min":hrs<24?Math.round(hrs)+" hr":Math.round(hrs/24)+" days";
+  nel.innerHTML=`<span class="label">Next up · in ${rel}</span><br><b>${d.name}, ${nx.s.min} min</b> · ${DAYFULL[nx.day]} ${t12(nx.s.time)}`}
+const schedEl=document.getElementById("sched");
+schedEl.addEventListener("click",e=>{
+  const del=e.target.closest("[data-del]");if(del){S.sched.splice(+del.dataset.del,1);save();renderSched();return}
+  const c=e.target.closest("[data-i]");if(!c)return;const s=S.sched[+c.dataset.i],day=+c.dataset.day;
+  s.days=s.days.includes(day)?s.days.filter(x=>x!==day):[...s.days,day];save();renderSched()});
+schedEl.addEventListener("change",e=>{const t=e.target.closest("[data-time]");if(!t)return;
+  S.sched[+t.dataset.time].time=t.value||"16:00";save();t.blur();renderSched()});
+const addDays=document.getElementById("addDays");addDays.innerHTML=chips([1,3,5],"");
+addDays.addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;b.setAttribute("aria-pressed",b.getAttribute("aria-pressed")!=="true")});
+const addBtn=document.getElementById("addBtn");
+addBtn.addEventListener("click",()=>{
+  const days=[...addDays.querySelectorAll('[aria-pressed="true"]')].map(b=>+b.dataset.day);
+  if(!days.length){addBtn.textContent="Pick at least one day first";setTimeout(()=>addBtn.textContent="Add to schedule",2000);return}
+  S.sched.push({days,time:document.getElementById("addTime").value||"16:00",
+    drill:addDrill.value,min:Math.max(5,+document.getElementById("addMin").value||20)});save();renderSched()});
+
+/* practice-time banner while page is open */
+let pending=null;
+function checkDue(){const now=new Date(),k=today();S.fired=S.fired||{};
+  S.sched.forEach((s,i)=>{const[h,m]=s.time.split(":").map(Number);
+    if(s.days.includes(now.getDay())&&now.getHours()===h&&now.getMinutes()>=m&&now.getMinutes()<m+10){
+      const id=k+"|"+i;if(!S.fired[id]){S.fired[id]=1;save();pending=s;const d=DRILLS.find(x=>x.id===s.drill);
+        document.getElementById("alertText").textContent=`Practice time: ${d.name} for ${s.min} minutes`;
+        document.getElementById("alert").hidden=false;beep(4)}}});renderSched()}
+document.getElementById("alertGo").addEventListener("click",()=>{if(pending)selectDrill(pending.drill,pending.min);
+  document.getElementById("alert").hidden=true;document.getElementById("h-timer").scrollIntoView({behavior:"smooth"})});
+setInterval(checkDue,30000);
+
+render();resetTimer();checkDue();
+</script>
+</body>
+</html>
