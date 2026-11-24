@@ -40,6 +40,7 @@ h2{font-size:1.25rem;font-weight:700;text-transform:uppercase;letter-spacing:.06
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .spread{justify-content:space-between}
 button,select,input{font:inherit;color:inherit}
+button{touch-action:manipulation;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 button{cursor:pointer;border:1px solid var(--line);background:var(--chip);border-radius:10px;padding:10px 14px;font-weight:600;min-height:44px}
 button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--navy);outline-offset:2px}
 button.primary{background:var(--navy);color:var(--card);border-color:var(--navy)}
@@ -63,7 +64,13 @@ select,input{background:var(--card);border:1px solid var(--line);border-radius:1
 .drill.met .status{color:var(--grass)} .drill.miss .status{color:var(--stitch)}
 .btns{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr) auto;gap:6px}
 .btns button{padding:10px 0}
-.btns .undo{padding:10px 12px}
+.btns .mode{padding:10px 18px;font-size:1.25rem;line-height:1}
+.btns .mode[aria-pressed="true"]{background:var(--stitch);border-color:var(--stitch);color:#fff}
+.drill.minus [data-n]{background:color-mix(in srgb,var(--stitch) 12%,var(--card));border-color:var(--stitch);color:var(--stitch)}
+.drill .count{background:none;border:0;padding:2px 4px;min-height:0;border-radius:8px;cursor:pointer;color:inherit}
+.drill .count:hover{background:var(--chip)}
+.countEdit{width:110px;justify-self:end;font-family:var(--display);font-size:2rem;font-weight:800;text-align:right;padding:2px 8px;min-height:0}
+.hint{color:var(--muted);font-size:.85rem;margin:-6px 0 0}
 .goal{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:.85rem}
 .goal input{width:70px;min-height:34px;padding:4px 8px}
 
@@ -111,6 +118,8 @@ select,input{background:var(--card);border:1px solid var(--line);border-radius:1
 @keyframes flashR{0%,40%,80%{background:color-mix(in srgb,var(--stitch) 35%,transparent)}20%,60%,100%{background:transparent}}
 .drill.flash-g{animation:flashG 1.6s ease-in-out}
 .drill.flash-r{animation:flashR 1.6s ease-in-out}
+/* iPad Safari zooms into any box with text under 16px */
+input,select{font-size:16px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}.drill.flash-g,.drill.flash-r{animation-duration:3s;animation-iteration-count:1}}
 </style>
 
@@ -126,6 +135,7 @@ select,input{background:var(--card);border:1px solid var(--line);border-radius:1
 
   <section class="card" aria-labelledby="h-reps">
     <div class="row spread"><h2 id="h-reps">Today's reps</h2><span class="label num" id="total"></span></div>
+    <p class="hint">Made a mistake? Tap <b>−</b> to take reps off, or tap the big number to type the right count.</p>
     <div id="drills"></div>
   </section>
 
@@ -198,20 +208,39 @@ drillsEl.innerHTML=DRILLS.map(d=>`
   <div class="drill" style="--c:${d.color}">
     <div><div class="name"><span class="dot"></span>${d.name}</div>
       <label class="goal">Goal <input class="num" type="number" min="1" id="goal-${d.id}"> ${d.unit}</label></div>
-    <div class="count num" id="c-${d.id}">0</div>
+    <button class="count num" id="c-${d.id}" data-edit="${d.id}" aria-label="Type the exact number of ${d.unit}">0</button>
+    <input class="countEdit num" id="e-${d.id}" type="number" inputmode="numeric" min="0" aria-label="Exact number of ${d.unit}" hidden>
     <div class="bar"><i id="b-${d.id}"></i></div>
     <div class="status" id="s-${d.id}"></div>
     <div class="btns">${[1,5,10,25].map(n=>`<button data-d="${d.id}" data-n="${n}" aria-label="Add ${n} ${d.unit}">+${n}</button>`).join("")}
-      <button class="undo ghost" data-undo="${d.id}" aria-label="Undo last ${d.name} entry">Undo</button></div>
+      <button class="mode" data-mode="${d.id}" aria-pressed="false" aria-label="Switch to removing ${d.unit}">−</button></div>
   </div>`).join("");
+/* minus mode: the four buttons subtract instead of add; it switches back after 8 seconds of no taps */
+const minus={},minusT={};
+const rowOf=id=>document.getElementById("c-"+id).closest(".drill");
+function setMinus(id,on){const d=DRILLS.find(x=>x.id===id),row=rowOf(id),m=row.querySelector("[data-mode]");
+  minus[id]=on;row.classList.toggle("minus",on);m.setAttribute("aria-pressed",on);m.textContent=on?"+":"−";
+  m.setAttribute("aria-label",on?"Switch back to adding "+d.unit:"Switch to removing "+d.unit);
+  row.querySelectorAll("[data-n]").forEach(b=>{b.textContent=(on?"−":"+")+b.dataset.n;b.setAttribute("aria-label",(on?"Remove ":"Add ")+b.dataset.n+" "+d.unit)});
+  clearTimeout(minusT[id]);if(on)minusT[id]=setTimeout(()=>setMinus(id,false),8000)}
+function setCount(id,v){const L=dayLog(today()),was=L[id]>=S.goals[id];L[id]=Math.max(0,Math.round(v));
+  save();render();if(!was&&L[id]>=S.goals[id]){flash(id,true);beep(2)}}
 drillsEl.addEventListener("click",e=>{
   const b=e.target.closest("button");if(!b)return;
-  const L=dayLog(today());const id=b.dataset.d||b.dataset.undo,was=L[id]>=S.goals[id];
-  if(b.dataset.n){const n=+b.dataset.n;L[b.dataset.d]+=n;undoStack.push([b.dataset.d,n])}
-  else if(b.dataset.undo){const i=undoStack.map(u=>u[0]).lastIndexOf(b.dataset.undo);
-    if(i>-1){L[b.dataset.undo]=Math.max(0,L[b.dataset.undo]-undoStack[i][1]);undoStack.splice(i,1)}}
-  save();render();
-  if(!was&&L[id]>=S.goals[id]){flash(id,true);beep(2)}});
+  if(b.dataset.mode){setMinus(b.dataset.mode,!minus[b.dataset.mode]);return}
+  if(b.dataset.edit){openEdit(b.dataset.edit);return}
+  if(!b.dataset.n)return;const id=b.dataset.d;
+  setCount(id,dayLog(today())[id]+(minus[id]?-1:1)*+b.dataset.n);
+  if(minus[id])setMinus(id,true)});
+/* tap the big number to type an exact count */
+function openEdit(id){const inp=document.getElementById("e-"+id);inp.value=dayLog(today())[id];
+  document.getElementById("c-"+id).hidden=true;inp.hidden=false;inp.focus();inp.select()}
+function closeEdit(id,keep){const inp=document.getElementById("e-"+id);if(inp.hidden)return;
+  inp.hidden=true;document.getElementById("c-"+id).hidden=false;
+  if(keep&&inp.value!=="")setCount(id,+inp.value)}
+DRILLS.forEach(d=>{const inp=document.getElementById("e-"+d.id);
+  inp.addEventListener("keydown",e=>{if(e.key==="Enter")closeEdit(d.id,true);if(e.key==="Escape")closeEdit(d.id,false)});
+  inp.addEventListener("blur",()=>closeEdit(d.id,true))});
 function flash(id,good){const row=document.getElementById("c-"+id).closest(".drill");
   row.classList.remove("flash-g","flash-r");void row.offsetWidth;row.classList.add(good?"flash-g":"flash-r");
   row.addEventListener("animationend",()=>row.classList.remove("flash-g","flash-r"),{once:true})}
@@ -241,10 +270,15 @@ function render(){
       <span class="d">${i===6?"Today":DAYS[x.d.getDay()]}</span></div>`}).join("");
   renderSched()}
 document.getElementById("legend").innerHTML=DRILLS.map(d=>`<span><i class="dot" style="--c:${d.color}"></i>${d.name}</span>`).join("");
-document.getElementById("today").textContent=new Date().toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+const showDate=()=>document.getElementById("today").textContent=new Date().toLocaleDateString(undefined,{weekday:"long",month:"long",day:"numeric"});
+showDate();
+/* new day while the app is still open: show the new date and start fresh counts */
+let dayKey=today();
+function refreshDay(){if(today()!==dayKey){dayKey=today();undoStack=[];showDate();render()}}
+setInterval(refreshDay,60000);
 
-/* ---------- timer ---------- */
-let cur=DRILLS[0],total=20*60,left=total,running=false,tick=null,wake=null,restLeft=0,sinceRest=0;
+/* ---------- timer: counts from the real clock, so it stays right if the iPad sleeps ---------- */
+let cur=DRILLS[0],totalMs=20*60e3,workLeft=totalMs,restLeft=0,sinceRest=0,running=false,tick=null,wake=null,lastTs=0;
 const clock=document.getElementById("clock"),phase=document.getElementById("phase"),startBtn=document.getElementById("startBtn");
 const presets=document.getElementById("presets");
 presets.innerHTML=DRILLS.map(d=>`<button data-p="${d.id}" aria-pressed="${d===cur}">${d.name}</button>`).join("");
@@ -253,34 +287,42 @@ function selectDrill(id,mins){cur=DRILLS.find(d=>d.id===id);
   presets.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.p===id));
   document.getElementById("workMin").value=mins||cur.min;resetTimer()}
 document.getElementById("workMin").addEventListener("change",resetTimer);
-const fmt=s=>String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
-function draw(){clock.textContent=fmt(restLeft>0?restLeft:left);
-  document.getElementById("ringFill").style.width=((total-left)/total*100)+"%"}
-function resetTimer(){stop();total=Math.max(1,+document.getElementById("workMin").value||cur.min)*60;left=total;restLeft=0;sinceRest=0;
+const fmt=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0")};
+function draw(){clock.textContent=fmt(restLeft>0?restLeft:workLeft);
+  document.getElementById("ringFill").style.width=((totalMs-workLeft)/totalMs*100)+"%"}
+function resetTimer(){stop();totalMs=Math.max(1,+document.getElementById("workMin").value||cur.min)*60e3;workLeft=totalMs;restLeft=0;sinceRest=0;
   clock.classList.remove("done");phase.textContent="Ready: "+cur.name;startBtn.textContent="Start";draw()}
 let actx=null;
 function beep(times=3){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();
   for(let i=0;i<times;i++){const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=i%2?660:880;
     o.connect(g);g.connect(actx.destination);const t=actx.currentTime+i*.35;
     g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.3,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.28);o.start(t);o.stop(t+.3)}}catch(e){}}
-function stop(){running=false;clearInterval(tick);try{wake&&wake.release()}catch(e){}wake=null}
-startBtn.addEventListener("click",async()=>{
-  if(running){stop();startBtn.textContent="Resume";phase.textContent="Paused: "+cur.name;return}
-  if(left<=0)resetTimer();
+function stop(){running=false;clearInterval(tick);tick=null;try{wake&&wake.release()}catch(e){}wake=null}
+function grabWake(){try{navigator.wakeLock.request("screen").then(w=>{wake=w;w.addEventListener("release",()=>{if(wake===w)wake=null})},()=>{})}catch(e){}}
+function finish(){stop();workLeft=0;restLeft=0;draw();clock.classList.add("done");startBtn.textContent="Start again";beep(5);
+  const v=dayLog(today())[cur.id],g=S.goals[cur.id],ok=v>=g;
+  phase.textContent=ok?cur.name+" done. Goal hit!":cur.name+" done. "+(g-v)+" "+cur.unit+" short of your goal.";
+  flash(cur.id,ok);document.getElementById("h-reps").scrollIntoView({behavior:"smooth"})}
+function step(){if(!running)return;const now=Date.now();let dt=Math.max(0,now-lastTs);lastTs=now;
+  const restMs=(+document.getElementById("restSec").value||0)*1000;
+  while(dt>0){
+    if(restLeft>0){const u=Math.min(dt,restLeft);restLeft-=u;dt-=u;if(restLeft<=0){restLeft=0;beep(1);phase.textContent="Go: "+cur.name}continue}
+    const prev=workLeft,u=Math.min(dt,workLeft);workLeft-=u;sinceRest+=u;dt-=u;
+    if(workLeft<=0){finish();return}
+    if(prev>60e3&&workLeft<=60e3){beep(1);phase.textContent="1 minute left"}
+    if(restMs>0&&sinceRest>=300e3&&workLeft>60e3){sinceRest=0;restLeft=restMs;beep(2);phase.textContent="Rest. Grab water."}
+  }
+  draw()}
+startBtn.addEventListener("click",()=>{
+  if(running){step();stop();draw();startBtn.textContent="Resume";phase.textContent="Paused: "+cur.name;return}
+  if(workLeft<=0)resetTimer();
   try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();actx.resume()}catch(e){}
-  try{wake=await navigator.wakeLock.request("screen")}catch(e){}
-  running=true;startBtn.textContent="Pause";phase.textContent="Go: "+cur.name;
-  tick=setInterval(()=>{
-    const rest=+document.getElementById("restSec").value||0;
-    if(restLeft>0){restLeft--;if(restLeft===0){beep(1);phase.textContent="Go: "+cur.name}draw();return}
-    left--;sinceRest++;
-    if(left<=0){stop();left=0;draw();clock.classList.add("done");startBtn.textContent="Start again";beep(5);
-      const v=dayLog(today())[cur.id],g=S.goals[cur.id],ok=v>=g;
-      phase.textContent=ok?cur.name+" done. Goal hit!":cur.name+" done. "+(g-v)+" "+cur.unit+" short of your goal.";
-      flash(cur.id,ok);document.getElementById("h-reps").scrollIntoView({behavior:"smooth"});return}
-    if(rest>0&&sinceRest>=300){sinceRest=0;restLeft=rest;beep(2);phase.textContent="Rest. Grab water."}
-    if(left===60&&restLeft===0){beep(1);phase.textContent="1 minute left"}
-    draw()},1000)});
+  grabWake();running=true;lastTs=Date.now();startBtn.textContent="Pause";
+  phase.textContent=restLeft>0?"Rest. Grab water.":"Go: "+cur.name;
+  tick=setInterval(step,250)});
+/* coming back to the app: catch the timer up, keep the screen awake, check the date */
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState!=="visible")return;
+  if(running){step();if(running&&!wake)grabWake()}refreshDay();checkDue()});
 document.getElementById("resetBtn").addEventListener("click",resetTimer);
 
 /* ---------- schedule ---------- */
@@ -325,9 +367,11 @@ addBtn.addEventListener("click",()=>{
 /* practice-time banner while page is open */
 let pending=null;
 function checkDue(){const now=new Date(),k=today();S.fired=S.fired||{};
-  S.sched.forEach((s,i)=>{const[h,m]=s.time.split(":").map(Number);
-    if(s.days.includes(now.getDay())&&now.getHours()===h&&now.getMinutes()>=m&&now.getMinutes()<m+10){
-      const id=k+"|"+i;if(!S.fired[id]){S.fired[id]=1;save();pending=s;const d=DRILLS.find(x=>x.id===s.drill);
+  for(const f in S.fired)if(!f.startsWith(k))delete S.fired[f];
+  const nowMin=now.getHours()*60+now.getMinutes();
+  S.sched.forEach(s=>{const[h,m]=s.time.split(":").map(Number),at=h*60+m;
+    if(s.days.includes(now.getDay())&&nowMin>=at&&nowMin<at+10){
+      const id=k+"|"+s.drill+"|"+s.time;if(!S.fired[id]){S.fired[id]=1;save();pending=s;const d=DRILLS.find(x=>x.id===s.drill);
         document.getElementById("alertText").textContent=`Practice time: ${d.name} for ${s.min} minutes`;
         document.getElementById("alert").hidden=false;beep(4)}}});renderSched()}
 document.getElementById("alertGo").addEventListener("click",()=>{if(pending)selectDrill(pending.drill,pending.min);
